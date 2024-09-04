@@ -21,7 +21,7 @@ jobs:
 
     - name: Import .iar files to Oracle OIC
       run: |
-        for file in ${{ env.IAR_FILES }}; do
+        for file in ${{ IAR_FILES }}; do
           echo "Importing $file to Oracle OIC"          
         done
     - name: Push if deploy succeeded
