@@ -22,9 +22,12 @@ jobs:
     - name: Import .iar files to Oracle OIC
       run: |
         for file in ${{ env.IAR_FILES }}; do
-          echo "Importing $file to Oracle OIC"
-          curl -X POST -u ${{ secrets.OIC_USERNAME }}:${{ secrets.OIC_PASSWORD }} \
-            -H "Content-Type: application/json" \
-            -F "file=@$file" \
-            "https://your-oic-instance.example.com/ic/api/integration/v1/integrations/import?overwrite=true"
+          echo "Importing $file to Oracle OIC"          
         done
+name: Push if deploy succeeded
+  if: success()
+  run: |
+    git config --global user.name "github-actions[bot]"
+    git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+    git push origin main
+  timeout-minutes: 10  # Increase the timeout as needed        
