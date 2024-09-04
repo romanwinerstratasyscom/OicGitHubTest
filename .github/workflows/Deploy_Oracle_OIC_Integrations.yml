@@ -32,6 +32,7 @@ jobs:
         #git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
         git push origin main
         
+    - name: Interrupt push and notify owner if deploy failed        
       if: failure()
       run: |
         echo "Deployment failed, not pushing the changes"
