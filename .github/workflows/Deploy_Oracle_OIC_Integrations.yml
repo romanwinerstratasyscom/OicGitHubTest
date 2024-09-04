@@ -1,0 +1,30 @@
+name: Deploy Oracle OIC Integrations
+
+on:
+  push:
+    branches:
+      - main  # Adjust the branch name as needed
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Find .iar files
+      run: |
+        IAR_FILES=$(find . -name "*.iar")
+        echo "Found .iar files: $IAR_FILES"
+        echo "IAR_FILES=$IAR_FILES" >> $GITHUB_ENV
+
+    - name: Import .iar files to Oracle OIC
+      run: |
+        for file in ${{ env.IAR_FILES }}; do
+          echo "Importing $file to Oracle OIC"
+          curl -X POST -u ${{ secrets.OIC_USERNAME }}:${{ secrets.OIC_PASSWORD }} \
+            -H "Content-Type: application/json" \
+            -F "file=@$file" \
+            "https://your-oic-instance.example.com/ic/api/integration/v1/integrations/import?overwrite=true"
+        done
