@@ -28,7 +28,12 @@ jobs:
     - name: Push if deploy succeeded
       if: success()
       run: |
-        git config --global user.name "github-actions[bot]"
-        git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        #git config --global user.name "github-actions[bot]"
+        #git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
         git push origin main
+        
+      if: failure()
+      run: |
+        echo "Deployment failed, not pushing the changes"
+        exit 1
       timeout-minutes: 10  # Increase the timeout as needed        
