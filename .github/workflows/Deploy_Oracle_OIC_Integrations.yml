@@ -1,25 +1,46 @@
-name: Deploy Oracle OIC Integrations
-
+name: Example workflow RW-Hello-World.yml
 on:
   push:
     branches:
-      - QA  # Adjust the branch name as needed
+      - TEST
 
 jobs:
-  deploy:
+  example_job:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v3
+        
+      - name: Check pusher's username and branch name
+        
+        run: |
+          echo "user name : ${{ github.event.pusher.name }}"          
+          echo "Branch name: ${GITHUB_REF##*/}"
+          echo echo "File names: ${{ github.event.head_commit.added }} , ${{ github.event.head_commit.modified }} , ${{ github.event.head_commit.removed }}"
 
-    - name: Find .iar files
-      run: |
-        IAR_FILES=$(find . -name "*.iar")
-        echo "Found .iar files: $IAR_FILES"
+      - name: Get Current COMMIT_ID
+        run: |
+          COMMIT_ID=${{ github.sha }}
+          echo "COMMIT_ID = $COMMIT_ID"
+          
+      - name: Get list of changed files
+        id: get_files
+        run: |
+          # Get the list of changed files and store them in a variable
+          files=$(git diff-tree --no-commit-id --name-only -r $COMMIT_ID)
+          
+          # Output the list of files for debugging
+          echo "Changed files:"
+          echo "$files"
+          
+          # Save the file list as output for future steps
+          echo "::set-output name=files::$files"
 
-    - name: Import .iar files to Oracle OIC
-      run: |
-        for file in $IAR_FILES; do
-          echo "Importing $file to Oracle OIC"          
-        done
+      - name: Process each file
+        run: |
+          # Loop through the list of files and process each one
+          for file in ${{ steps.get_files.outputs.files }}; do
+            echo "Processing file: $file"
+            # Add your logic to handle each file here
+          done
+          
