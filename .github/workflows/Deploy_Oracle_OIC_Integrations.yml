@@ -3,7 +3,7 @@ name: Deploy Oracle OIC Integrations
 on:
   push:
     branches:
-      - main  # Adjust the branch name as needed
+      - QA  # Adjust the branch name as needed
 
 jobs:
   deploy:
