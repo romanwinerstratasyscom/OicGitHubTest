@@ -2,7 +2,7 @@ name: Example workflow RW-Hello-World.yml
 on:
   push:
     branches:
-      - TEST
+      - QA
 
 jobs:
   example_job:
